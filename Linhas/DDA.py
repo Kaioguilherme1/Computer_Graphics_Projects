@@ -1,45 +1,58 @@
-def draw_line_dda(app, x1, y1, x2, y2, color="red"):
+from time import sleep
+
+
+def desenhar_linha_dda(app, ponto1, ponto2, velocidade=100, cor="red"):
     """
     Implementação do Método DDA (Digital Differential Analyzer), utilizando if-else.
-    Desenha uma linha no espaço discreto entre dois pontos (x1, y1) e (x2, y2).
+    Desenha uma linha no espaço discreto entre dois pontos especificados por suas coordenadas.
 
-    :param app: Objeto gráfico com o método `color_pixel` para desenhar pixels
-    :param x1: Coordenada x do ponto inicial
-    :param y1: Coordenada y do ponto inicial
-    :param x2: Coordenada x do ponto final
-    :param y2: Coordenada y do ponto final
-    :param color: Cor da linha (por padrão, "red")
+    :param app: Objeto gráfico com o método `color_pixel` para desenhar pixels.
+    :param ponto1: Lista [x, y] especificando o ponto inicial.
+    :param ponto2: Lista [x, y] especificando o ponto final.
+    :param cor: Cor da linha (por padrão, "red").
+    :param velocidade: Valor de 0-100 para controlar a velocidade (100 = mais rápido).
     """
+    # Extraindo as coordenadas dos pontos
+    x1, y1 = ponto1
+    x2, y2 = ponto2
+
     # Calcula as diferenças (dx e dy)
     dx = x2 - x1
     dy = y2 - y1
 
     # Verifica se o delta dominante é horizontal ou vertical
     if abs(dx) > abs(dy):  # Caso |x2 - x1| > |y2 - y1| (incremento principal no eixo x)
-        steps = abs(dx)  # Passos a serem percorridos no eixo x
-        increment_y = dy / dx  # Incremento proporcional no eixo y
-        increment_x = 1 if dx > 0 else -1  # Determina a direção do incremento em x
+        passos = abs(dx)  # Número de passos no eixo x
+        incremento_y = dy / abs(dx)  # Incremento proporcional no eixo y
+        incremento_x = 1 if dx > 0 else -1  # Direção do incremento em x
 
         # Começa nos valores iniciais
         x = x1
         y = y1
 
         # Loop principal para rasterizar a linha
-        for _ in range(steps + 1):
-            app.color_pixel(round(y), round(x), color)  # Desenha o pixel
-            x += increment_x  # Incremento em x
-            y += increment_y  # Incremento em y proporcional
+        for _ in range(passos + 1):
+            app.color_pixel(round(x), round(y), cor)  # Desenha o pixel
+            x += incremento_x  # Incremento em x
+            y += incremento_y  # Incremento proporcional em y
+            # Adiciona atraso baseado na velocidade
+            if velocidade < 100:
+                sleep((100 - velocidade) / 10000)
+
     else:  # Caso contrário, |y2 - y1| >= |x2 - x1| (incremento principal no eixo y)
-        steps = abs(dy)  # Passos a serem percorridos no eixo y
-        increment_x = dx / dy  # Incremento proporcional no eixo x
-        increment_y = 1 if dy > 0 else -1  # Determina a direção do incremento em y
+        passos = abs(dy)  # Número de passos no eixo y
+        incremento_x = dx / abs(dy)  # Incremento proporcional no eixo x
+        incremento_y = 1 if dy > 0 else -1  # Direção do incremento em y
 
         # Começa nos valores iniciais
         x = x1
         y = y1
 
         # Loop principal para rasterizar a linha
-        for _ in range(steps + 1):
-            app.color_pixel(round(y), round(x), color)  # Desenha o pixel
-            x += increment_x  # Incremento em x proporcional
-            y += increment_y  # Incremento em y
+        for _ in range(passos + 1):
+            app.color_pixel(round(x), round(y), cor)  # Desenha o pixel
+            x += incremento_x  # Incremento proporcional em x
+            y += incremento_y  # Incremento em y
+            # Adiciona atraso baseado na velocidade
+            if velocidade < 100:
+                sleep((100 - velocidade) / 10000)

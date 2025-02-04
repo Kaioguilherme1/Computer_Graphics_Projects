@@ -6,14 +6,14 @@ from Incremental_com_simetria import incremental_com_simetria
 from bresenham_circunferencia import bresenham_circunferencia
 
 # Import dos algoritmos e da interface
-from interface import MatrixDeRasterizacao
+from interface import MatrizDeRasterizacao
 
 # Define os pontos para gerar as retas
 ponto1, ponto2 = [], []
 
 # Define tamanho das matrizes
-Vertical = 500
-Horizontal = 500
+Vertical = 400
+Horizontal = 400
 pixel = 1
 
 # Variável global para definir a velocidade do algoritmo
@@ -64,15 +64,15 @@ class MainApplication:
 
         # Exemplo inicial com algoritmos específicos
         self.adicionar_nova_tela(
-            obj=MatrixDeRasterizacao, altura=Vertical, largura=Horizontal, titulo="Algoritmo: Equação Paramétrica",
+            obj=MatrizDeRasterizacao, altura=Vertical, largura=Horizontal, titulo="Algoritmo: Equação Paramétrica",
             algoritmo=eq_parametrica
         )
         self.adicionar_nova_tela(
-            obj=MatrixDeRasterizacao, altura=Vertical, largura=Horizontal, titulo="Algoritmo: Incremental com Simetria",
+            obj=MatrizDeRasterizacao, altura=Vertical, largura=Horizontal, titulo="Algoritmo: Incremental com Simetria",
             algoritmo=incremento_simetrico
         )
         self.adicionar_nova_tela(
-            obj=MatrixDeRasterizacao, altura=Vertical, largura=Horizontal, titulo="Algoritmo: Bresenham", algoritmo=bresenham
+            obj=MatrizDeRasterizacao, altura=Vertical, largura=Horizontal, titulo="Algoritmo: Bresenham", algoritmo=bresenham
         )
 
     def adicionar_nova_tela(self, obj, altura=64, largura=64, titulo="Nova Tela", algoritmo=None):
@@ -114,7 +114,7 @@ class MainApplication:
     def iniciar_todos(self):
         """Inicia o algoritmo em todas as janelas."""
         for app in self.pixel_apps:
-            app.start()  # Usa o método start() de cada instância
+            app.iniciar()  # Usa o método iniciar() de cada instância
 
     def reiniciar_todos(self):
         """Reinicia todas as janelas."""
@@ -122,7 +122,7 @@ class MainApplication:
         ponto1 = []
         ponto2 = []
         for app in self.pixel_apps:
-            app.reset()  # Usa o método reset() para limpar a matriz
+            app.reiniciar()  # Usa o método reiniciar() para limpar a matriz
 
     def atualizar_velocidade(self, valor):
         """Atualiza a velocidade global do algoritmo com o valor do slider.

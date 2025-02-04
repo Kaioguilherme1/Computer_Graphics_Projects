@@ -1,18 +1,27 @@
 import tkinter as tk
+import sys
 from tkinter import ttk
 
 # Import dos algoritmos e da interface
 from interface import MatrizDeRasterizacao
-from Bresenham import desenhar_linha_bresenham
-from DDA import desenhar_linha_dda
-from Metodo_analitico import desenhar_linha_analitica
+from flood_fill import flood_fill, desenhar_poligono, encontrar_ponto_interno
+from varredura_preenchimento_algo import varredura_geometrica
+
+
+
+# feito isto para o algoritimo Flood_fill para matrizes maiores que 64 x 64
+print('Limite de recursão anterior: ',sys.getrecursionlimit())  #
+sys.setrecursionlimit(50000)  # Altere 2000 para o novo limite desejado
+print('Limite de recursão Atual: ',sys.getrecursionlimit())  #
+
+
 
 # Define os pontos para gerar as retas
-ponto1, ponto2 = [], []
+Vertices = []
 
 # Define tamanho das matrizes
-Vertical = 400
-Horizontal = 400
+Vertical = 500
+Horizontal = 500
 pixel = 1
 
 # Variável global para definir a velocidade do algoritmo
@@ -23,7 +32,7 @@ class MainApplication:
     def __init__(self, raiz):
         """Configura a janela principal."""
         self.raiz = raiz
-        self.raiz.title("Comparação de Algoritmos de Rasterização de Linhas")
+        self.raiz.title("Comparação de Algoritmos de preenchimento")
 
         # Contêiner para as telas
         self.container = ttk.Frame(raiz)
@@ -61,19 +70,16 @@ class MainApplication:
         # Lista de instâncias criadas
         self.pixel_apps = []
 
-        # Exemplo inicial com algoritmos específicos
         self.adicionar_nova_tela(
-            obj=MatrizDeRasterizacao, altura=Vertical, largura=Horizontal, titulo="Algoritmo: Metodo Analitico ",
-            algoritmo=Metodo_Analitico
+            obj=MatrizDeRasterizacao, altura=Vertical, largura=Horizontal, titulo="Algoritmo: Flood Fill",
+            algoritmo=Flood_Fill
         )
+
         self.adicionar_nova_tela(
-            obj=MatrizDeRasterizacao, altura=Vertical, largura=Horizontal, titulo="Algoritmo: DDA",
-            algoritmo=Dda
+            obj=MatrizDeRasterizacao, altura=Vertical, largura=Horizontal, titulo="Algoritmo: Varredura com análise Geométrica",
+            algoritmo=Analise_Geometrica
         )
-        self.adicionar_nova_tela(
-            obj=MatrizDeRasterizacao, altura=Vertical, largura=Horizontal, titulo="Algoritmo: Bresenham",
-            algoritmo=bresenham
-        )
+
 
     def adicionar_nova_tela(self, obj, altura=64, largura=64, titulo="Nova Tela", algoritmo=None):
         """Adiciona uma nova janela de exibição ao contêiner."""
@@ -84,7 +90,7 @@ class MainApplication:
         app.canvas.bind("<Button-1>", lambda evento, app=app: self.capturar_clique_matriz(evento, app))
 
     def capturar_clique_matriz(self, evento, app):
-        """Captura o clique no canvas e atualiza as coordenadas selecionadas.
+        """Captura o clique no canvas e armazena os pontos clicados em uma lista global `Vertices`.
 
         :param evento: Evento de clique no canvas.
         :param app: Instância da janela onde ocorreu o clique.
@@ -94,19 +100,13 @@ class MainApplication:
         linha = evento.y // tamanho_pixel
         coluna = evento.x // tamanho_pixel
 
-        global ponto1, ponto2
+        global Vertices
 
-        # Verifica qual ponto salvar
-        if not ponto1:  # Caso `ponto1` não esteja definido (primeiro clique)
-            ponto1 = [coluna, linha]  # Salva as coordenadas no primeiro ponto
-            self.coord_label.config(text=f"Primeiro ponto: ({coluna}, {linha})")  # Atualiza na interface
-        elif not ponto2:  # Caso `ponto1` já exista, salva as coordenadas no segundo ponto
-            ponto2 = [coluna, linha]  # Salva as coordenadas no segundo ponto
-            self.coord_label.config(
-                text=f"Primeiro ponto: ({ponto1[1]}, {ponto1[0]})\nSegundo ponto: ({linha}, {coluna})")
-        else:
-            # Se ambos já estiverem definidos, avisa o usuário (ou pode substituir)
-            self.coord_label.config(text="Ambos os pontos já estão definidos. Reinicie para redefinir.")
+        # Adiciona o ponto clicado à lista de vértices
+        Vertices.append([coluna, linha])
+
+        # Atualiza a interface mostrando os pontos já capturados
+        self.coord_label.config(text=f"Vértices capturados: {len(Vertices)}\nÚltimo Vértice: ({coluna}, {linha})")
 
         # Pinta o pixel clicado de azul
         app.color_pixel(coluna, linha, "blue")
@@ -118,9 +118,8 @@ class MainApplication:
 
     def reiniciar_todos(self):
         """Reinicia todas as janelas."""
-        global ponto1, ponto2
-        ponto1 = []
-        ponto2 = []
+        global Vertices
+        Vertices = []
         for app in self.pixel_apps:
             app.reiniciar()  # Usa o método reiniciar() para limpar a matriz
 
@@ -136,15 +135,14 @@ class MainApplication:
 
 
 # Funções dos algoritmos conectadas à interface principal
-def Metodo_Analitico(app):
-    desenhar_linha_analitica(app, ponto1, ponto2, velocidade_algoritmo)
+def Flood_Fill(app):
+    desenhar_poligono(app, Vertices)
+    flood_fill(app, encontrar_ponto_interno(Vertices), velocidade_algoritmo)
+
+def Analise_Geometrica(app):
+    varredura_geometrica(app, Vertices, velocidade_algoritmo)
 
 
-def Dda(app):
-    desenhar_linha_dda(app, ponto1, ponto2, velocidade_algoritmo)
-
-def bresenham(app):
-    desenhar_linha_bresenham(app, ponto1, ponto2, velocidade_algoritmo)
 
 # Executa o aplicativo principal
 if __name__ == "__main__":
