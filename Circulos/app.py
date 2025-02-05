@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Adiciona o diretório pai ao sys.path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import tkinter as tk
 from tkinter import ttk
 

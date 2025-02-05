@@ -6,6 +6,12 @@ Este repositório foi criado como parte de um trabalho para a disciplina de **Co
 
 ## 📋 Técnicas Implementadas
 
+### Requisitos
+
+* Python 3.11 ou superior
+
+* Nenhuma dependência adicional é necessária
+
 ### [1. Algoritmos de Linhas](Linhas/README.md)
 Incluem três métodos clássicos para o desenho de linhas:
 - **[Método Analítico](#)**: Utiliza a fórmula da equação da reta para calcular diretamente os pixels.
@@ -15,6 +21,11 @@ Incluem três métodos clássicos para o desenho de linhas:
 A execução simultânea dos algoritmos pode ser visualizada no GIF abaixo:
 
 ![GIF comparando os algoritmos de linha](Linhas/Test_linha.gif)
+
+Comando para executar a partir da base do repositorio
+```bash
+    python3 Linhas/app.py
+```
 
 ---
 
@@ -28,6 +39,13 @@ Confira no GIF abaixo a execução simultânea desses algoritmos:
 
 ![GIF comparando os algoritmos de círculo](Circulos/Tese_Circufferencia.gif)
 
+Comando para executar a partir da base do repositorio
+```bash
+    python3 Circulos/app.py
+```
+
+---
+
 ---
 
 ### [3. Algoritmos de Preenchimento de Polígonos](Preenchimento/README.md)
@@ -39,6 +57,10 @@ Veja o comparativo entre os dois algoritmos no GIF abaixo:
 
 ![GIF comparando os algoritmos de preenchimento](Preenchimento/Teste_Preenchimento.gif)
 
+Comando para executar a partir da base do repositorio
+```bash
+    python3 Preenchimento/app.py
+```
 ---
 
 ## 🎯 Objetivo
