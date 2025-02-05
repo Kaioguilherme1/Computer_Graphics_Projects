@@ -1,4 +1,4 @@
-# Projeto: [Algoritmos Gráficos para Desenho e Preenchimento de Formas](#)
+# Algoritimos de Computação Grafica
 
 Este repositório foi criado como parte de um trabalho para a disciplina de **Computação Gráfica** da **UFRR**. O objetivo principal é proporcionar um meio de aprendizado comparando e demonstrando o funcionamento de distintos algoritmos gráficos clássicos para desenhar e preencher formas geométricas. Cada algoritmo é executado em **threads separadas**, possibilitando uma análise visual e individual de seu desempenho e comportamento.
 
