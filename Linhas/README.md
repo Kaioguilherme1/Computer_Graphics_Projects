@@ -17,37 +17,30 @@ Este relatório apresenta e compara três algoritmos usados para desenhar linhas
 
 ### 2.1 Algoritmo **Analítico**
 
-O algoritmo **Analítico** baseia-se na fórmula da equação da reta y=mx+by = mx + b, onde mm é a inclinação da reta e bb é o intercepto. Ele calcula o valor de yy para cada xx ou vice-versa, desenhando a linha pixel por pixel. Embora seja simples e direto, ele pode ser ineficiente para linhas verticais, onde o cálculo de yy não é necessário.
+O algoritmo **Analítico** baseia-se na equação da reta:
 
-- **Processo**:
-    1. A inclinação  é calculada pela fórmula .
+**y = m * x + b**
 
-       mm
+onde:
 
-       m=y2−y1x2−x1m = \frac{y_2 - y_1}{x_2 - x_1}
+- **m** é a inclinação da reta, calculada como:
+    
+    m = (y2 - y1) / (x2 - x1)
+    
+- **b** é o intercepto no eixo Y, obtido por:
+    
 
-    2. O intercepto  é calculado por .
+    b = y1 - (m * x1)
+    
 
-       bb
+O algoritmo percorre os valores de **x** entre **x1** e **x2**, calculando os respectivos valores de **y** e desenhando cada pixel correspondente.
 
-       b=y1−m⋅x1b = y_1 - m \cdot x_1
+### Processo:
 
-    3. A linha é desenhada variando  de  até , e para cada , calcula-se .
-
-       xx
-
-       x1x_1
-
-       x2x_2
-
-       xx
-
-       yy
-
-    4. Caso a linha seja vertical, apenas  varia.
-
-       yy
-
+1. **Calcular a inclinação** `m` da reta.
+2. **Determinar o intercepto** `b`.
+3. **Percorrer os pontos entre `x1` e `x2`, calculando `y` para cada `x` usando a equação da reta.**
+4. **Se a linha for vertical (`x1 == x2`), variar apenas `y`, mantendo `x` fixo.**
 ### 2.2 Algoritmo **DDA (Digital Differential Analyzer)**
 
 O **DDA** utiliza a interpolação digital para calcular os pontos da linha. O algoritmo começa a partir de um dos pontos e, para cada incremento de xx ou yy, calcula o valor da outra coordenada, garantindo que os pontos formem uma linha reta. O DDA é mais eficiente que o método analítico para linhas de inclinação variável, mas pode sofrer de imprecisões devido ao arredondamento.
