@@ -52,7 +52,6 @@ def flood_fill(app, posicao, velocidade=100, cor_alvo="white", nova_cor="red"):
         return
 
     if cor_atual == nova_cor:
-        print(f'Ja pintado {x} {y}')
         return
 
     cor_atual = None

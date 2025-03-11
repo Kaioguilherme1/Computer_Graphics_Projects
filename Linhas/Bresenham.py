@@ -28,7 +28,7 @@ def desenhar_linha_bresenham(app, ponto1, ponto2, velocidade=0, cor="red"):
 
     # Inicializa o parâmetro de decisão
     if dx > dy:  # Caso inclinação da linha seja <= 1
-        p = 2 * dy - dx  # Valor inicial do parâmetro
+        p = 2 * dy - dx  # Valor inicial do parâmetro, erro acumulado
         y = y1  # Começa no y inicial
 
         # Loop para rasterizar cada pixel

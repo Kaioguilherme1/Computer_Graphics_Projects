@@ -121,6 +121,9 @@ class MatrizDeRasterizacao:
         self.canvas.delete("all")
         print(f"Tela reiniciada: {self.rotulo['text']}")
 
+    def limpar(self):
+        """Limpa o ambiente."""
+        self.canvas.delete("all")
 
     def color_pixel(self, x, y, cor):
         """
