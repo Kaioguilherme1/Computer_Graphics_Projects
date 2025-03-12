@@ -125,7 +125,7 @@ class MatrizDeRasterizacao:
         """Limpa o ambiente."""
         self.canvas.delete("all")
 
-    def color_pixel(self, x, y, cor):
+    def color_pixel(self, x, y, cor, tamanho_pixel=None):
         """
         Desenha um pixel ampliado no Canvas.
 
@@ -133,12 +133,21 @@ class MatrizDeRasterizacao:
         :param y: Coordenada lógica (linha).
         :param cor: Cor em formato hexadecimal, exemplo: "#FF0000".
         """
+
         tamanho = self.pixel_size
+
         # Define as coordenadas do retângulo que representa o pixel ampliado
         x1 = x * tamanho
         y1 = y * tamanho
         x2 = x1 + tamanho
         y2 = y1 + tamanho
+
+        # desenha outros pixel em volta do pixel principal com base no tamanho do pixel
+        if tamanho_pixel:
+            x1 = x1 - tamanho_pixel
+            y1 = y1 - tamanho_pixel
+            x2 = x2 + tamanho_pixel
+            y2 = y2 + tamanho_pixel
 
         # Desenha o retângulo no Canvas usando as coordenadas calculadas
         self.canvas.create_rectangle(x1, y1, x2, y2, fill=cor, outline=cor)

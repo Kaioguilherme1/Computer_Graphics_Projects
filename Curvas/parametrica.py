@@ -27,7 +27,7 @@ def fatorial(n):
         resultado *= i
     return resultado
 
-def desenhar_curva_bezier(app, pontos_controle,constante_t=0, num_pontos=100, velocidade=100, cor='blue'):
+def desenhar_curva_bezier(app, pontos_controle,constante_t=0, num_pontos=100, velocidade=100, cor='red'):
     """
     Desenha a curva de Bézier utilizando a equação paramétrica, desenhando ponto a ponto.
 
@@ -36,6 +36,7 @@ def desenhar_curva_bezier(app, pontos_controle,constante_t=0, num_pontos=100, ve
     :param num_pontos: Número de pontos para desenhar a curva.
     :param velocidade: Velocidade do desenho (0-100). Padrão 100 (mais rápido).
     """
+    curva = []
     for i in range(num_pontos + 1):
         if constante_t == 0:
             t = i / num_pontos  # O valor de t varia de 0 a 1
@@ -45,9 +46,9 @@ def desenhar_curva_bezier(app, pontos_controle,constante_t=0, num_pontos=100, ve
         ponto = bezier(t, pontos_controle)  # Calcula o ponto na curva para o valor t
         # Desenha o ponto individualmente
         app.color_pixel(ponto[0], ponto[1], cor)  # Desenha o ponto na curva de Bézier com a cor azul
-
+        curva.append(ponto)
         # Adiciona atraso baseado na velocidade (quanto menor, mais lento)
         if velocidade < 100:
             sleep((100 - velocidade) / 10000)
 
-    return pontos_controle  # Retorna os pontos de controle da curva
+    return curva # Retorna os pontos da curva
