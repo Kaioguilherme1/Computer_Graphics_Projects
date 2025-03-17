@@ -1,50 +1,51 @@
 from time import sleep
+import numpy as np
 
 
-def casteljau(t, pontos_controle):
+def subdivision(P0, P1, P2, P3):
     """
-    Calcula um ponto na curva de Bézier utilizando o algoritmo de De Casteljau.
-
-    :param t: Valor paramétrico (0 <= t <= 1).
-    :param pontos_controle: Lista de pontos de controle da curva.
-    :return: Ponto interpolado na curva de Bézier [x, y].
+    Calcula os pontos intermediários da curva de Bézier usando o método de De Casteljau.
+    Retorna os novos pontos para subdivisão.
     """
-    pontos = pontos_controle[:]
-    n = len(pontos) - 1  # Ordem da curva (grau da Bézier)
+    P0xD1 = (P0 + P1) / 2
+    P1xD1 = (P1 + P2) / 2
+    P2xD1 = (P2 + P3) / 2
 
-    # Aplicação do algoritmo de De Casteljau
-    for r in range(1, n + 1):  # Percorre os níveis da interpolação
-        for i in range(n - r + 1):  # Calcula os novos pontos intermediários
-            # Interpolação linear entre dois pontos
-            x = (1 - t) * pontos[i][0] + t * pontos[i + 1][0]
-            y = (1 - t) * pontos[i][1] + t * pontos[i + 1][1]
-            pontos[i] = [x, y]  # Atualiza o ponto interpolado
+    P0xD2 = (P0xD1 + P1xD1) / 2
+    P1xD2 = (P1xD1 + P2xD1) / 2
 
-    return [int(pontos[0][0]), int(pontos[0][1])]  # Retorna o ponto final calculado
+    P0xD3 = (P0xD2 + P1xD2) / 2
+
+    return P0xD1, P2xD1, P0xD2, P1xD2, P0xD3
+
+
+def casteljau_recursivo(pontos_controle, t, curve_points):
+    """
+    Algoritmo de De Casteljau recursivo para calcular pontos da curva de Bézier para um número dinâmico de pontos.
+    """
+    if len(pontos_controle) == 1:
+        curve_points.append(pontos_controle[0])
+        return
+    novos_pontos = [(1 - t) * pontos_controle[i] + t * pontos_controle[i + 1] for i in range(len(pontos_controle) - 1)]
+    casteljau_recursivo(novos_pontos, t, curve_points)
 
 
 def desenhar_curva_casteljau(app, pontos_controle, num_pontos=100, constante_t=0, velocidade=100, cor='red'):
     """
     Desenha a curva de Bézier utilizando o algoritmo de De Casteljau.
-
-    :param app: Instância do aplicativo onde os pixels serão desenhados.
-    :param pontos_controle: Lista de pontos de controle da curva de Bézier.
-    :param constante_t: Define um valor fixo de t (0 a 100) ou 0 para variação automática.
-    :param velocidade: Velocidade do desenho (0-100). Padrão 100 (mais rápido).
-    :param cor: Cor usada para rasterizar a curva.
     """
+    if len(pontos_controle) < 2:
+        raise ValueError("São necessários pelo menos dois pontos de controle para desenhar a curva.")
+
     curva = []
     for i in range(num_pontos + 1):
-        if constante_t == 0:
-            t = i / num_pontos  # Variação automática de t de 0 a 1
-        else:
-            t = constante_t / 100  # Usa o valor fixo de t fornecido
+        t = i / num_pontos if constante_t == 0 else constante_t / 100
+        casteljau_recursivo([np.array(pt) for pt in pontos_controle], t, curva)
 
-        ponto = casteljau(t, pontos_controle)  # Calcula o ponto na curva
-        app.color_pixel(ponto[0], ponto[1], cor)  # Desenha o ponto na tela
+    for ponto in curva:
+        app.color_pixel(int(ponto[0]), int(ponto[1]), cor)
         curva.append(ponto)
-        # Adiciona um pequeno atraso baseado na velocidade para visualização do desenho
         if velocidade < 100:
             sleep((100 - velocidade) / 10000)
 
-    return curva  # Retorna os pontos de controle da curva
+    return curva

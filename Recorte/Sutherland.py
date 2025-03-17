@@ -30,7 +30,6 @@ def sutherland_hodgman_clip(app, poligono, janela_recorte, velocidade=100):
         return [int(ponto1[0] + t * dx), int(ponto1[1] + t * dy)]
 
     lista_saida = poligono
-    print(velocidade)
     for i in range(len(janela_recorte)):
         lista_entrada = lista_saida
         lista_saida = []
