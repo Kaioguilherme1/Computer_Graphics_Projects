@@ -44,7 +44,6 @@ def desenhar_curva_casteljau(app, pontos_controle, num_pontos=100, constante_t=0
 
     for ponto in curva:
         app.color_pixel(int(ponto[0]), int(ponto[1]), cor)
-        curva.append(ponto)
         if velocidade < 100:
             sleep((100 - velocidade) / 10000)
 
