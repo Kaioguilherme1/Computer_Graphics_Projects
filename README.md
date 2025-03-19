@@ -63,6 +63,32 @@ Comando para executar a partir da base do repositorio
 ```
 ---
 
+### [4. Algoritimos de curva de Bezier](Curvas/README.md)
+Os algoritmos implementados para desenhar curvas de Bézier incluem:
+- **[Parametrica](#)**: Utiliza a equação paramétrica para calcular os pontos da curva.
+- **[De Casteljau](#)**: Utiliza o algoritmo de De Casteljau recursivamente para calcular os pontos da curva.
+
+veja o comparativo entre os dois algoritmos no GIF abaixo:
+![GIF comparando os algoritmos de curva de Bezier](Curvas/Curvas.gif)
+
+Comando para executar a partir da base do repositorio
+```bash
+    python3 Curvas/app.py
+```
+
+### [5. Algoritimo de Recorte de Sutherland](Recorte/README.md)
+O algoritimo implementado para recorte de Sutherland é:
+- **[Recorte de Sutherland](#)**: Utiliza o algoritimo de recorte de Sutherland para retorta um poligono com uma borda de recorte.
+
+veja o comparativo entre os dois algoritmos no GIF abaixo:
+
+![GIF comparando os algoritmos de recorte de Sutherland](Recorte/Recorte.gif)
+
+Comando para executar a partir da base do repositorio
+```bash
+    python3 Recorte/app.py
+```
+
 ## 🎯 Objetivo
 
 Este projeto tem como foco acadêmico demonstrar o funcionamento de algoritmos gráficos e permitir uma análise comparativa. Ele foi desenvolvido de forma a facilitar o entendimento prático dos métodos estudados na disciplina de **Computação Gráfica (UFRR)**.

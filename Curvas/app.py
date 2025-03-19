@@ -240,7 +240,7 @@ def parametrica(app):
             ponto_mais_proximo(app, ponto, curva)
 
 def casteljau(app):
-    curva = desenhar_curva_casteljau(app, pontos_controle=Pontos, constante_t=besie, num_pontos=num_pontos , velocidade=velocidade_algoritmo)
+    curva = desenhar_curva_casteljau(app, pontos_controle=Pontos, num_pontos=num_pontos , velocidade=velocidade_algoritmo)
     if forca:
         for ponto in Pontos:
             ponto_mais_proximo(app, ponto, curva)

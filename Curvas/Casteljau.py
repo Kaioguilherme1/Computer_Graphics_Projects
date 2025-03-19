@@ -2,49 +2,63 @@ from time import sleep
 import numpy as np
 
 
-def subdivision(P0, P1, P2, P3):
+def subdivision(pontos_controle):
     """
-    Calcula os pontos intermediários da curva de Bézier usando o método de De Casteljau.
-    Retorna os novos pontos para subdivisão.
-    """
-    P0xD1 = (P0 + P1) / 2
-    P1xD1 = (P1 + P2) / 2
-    P2xD1 = (P2 + P3) / 2
-
-    P0xD2 = (P0xD1 + P1xD1) / 2
-    P1xD2 = (P1xD1 + P2xD1) / 2
-
-    P0xD3 = (P0xD2 + P1xD2) / 2
-
-    return P0xD1, P2xD1, P0xD2, P1xD2, P0xD3
-
-
-def casteljau_recursivo(pontos_controle, t, curve_points):
-    """
-    Algoritmo de De Casteljau recursivo para calcular pontos da curva de Bézier para um número dinâmico de pontos.
+    Divide uma curva de Bézier em duas subcurvas usando o método de De Casteljau.
+    A subdivisão ocorre calculando pontos médios entre pares consecutivos.
     """
     if len(pontos_controle) == 1:
-        curve_points.append(pontos_controle[0])
-        return
-    novos_pontos = [(1 - t) * pontos_controle[i] + t * pontos_controle[i + 1] for i in range(len(pontos_controle) - 1)]
-    casteljau_recursivo(novos_pontos, t, curve_points)
+        return pontos_controle
+
+    novos_pontos = []  # Lista para armazenar os novos pontos gerados na subdivisão
+
+    # Percorre todos os pontos de controle e calcula o ponto médio entre pares consecutivos
+    for i in range(len(pontos_controle) - 1):
+        media = (pontos_controle[i] + pontos_controle[i + 1]) / 2
+        novos_pontos.append(media)
+
+    # Recursivamente, retorna os pontos da primeira metade, o ponto central e os da segunda metade
+    return [pontos_controle[0]] + subdivision(novos_pontos) + [pontos_controle[-1]]
 
 
-def desenhar_curva_casteljau(app, pontos_controle, num_pontos=100, constante_t=0, velocidade=100, cor='red'):
+def desenhar_curva_casteljau(app, pontos_controle, num_pontos=100, velocidade=100, cor='red', curva=None):
     """
-    Desenha a curva de Bézier utilizando o algoritmo de De Casteljau.
+    Desenha uma curva de Bézier utilizando recursão e subdivisões sucessivas pelo método de De Casteljau.
+
+    Parâmetros:
+    - app: Objeto que contém o método `color_pixel` para desenhar os pontos.
+    - pontos_controle: Lista de pontos que definem a curva de Bézier.
+    - num_pontos: Número de pontos desejado na curva final.
+    - velocidade: Controla a velocidade de desenho (0 = mais rápido, 100 = mais lento).
+    - cor: Cor dos pontos desenhados.
+    - curva: Lista de pontos da curva acumulados pela recursão.
+
+    Retorna:
+    - Lista de pontos que representam a curva desenhada.
     """
     if len(pontos_controle) < 2:
         raise ValueError("São necessários pelo menos dois pontos de controle para desenhar a curva.")
 
-    curva = []
-    for i in range(num_pontos + 1):
-        t = i / num_pontos if constante_t == 0 else constante_t / 100
-        casteljau_recursivo([np.array(pt) for pt in pontos_controle], t, curva)
+    if curva is None:
+        curva = []
 
-    for ponto in curva:
-        app.color_pixel(int(ponto[0]), int(ponto[1]), cor)
-        if velocidade < 100:
-            sleep((100 - velocidade) / 10000)
+    # Aplica a subdivisão para gerar mais pontos
+    nova_curva = subdivision([np.array(pt) for pt in pontos_controle])
 
-    return curva
+    # Adiciona os novos pontos gerados à curva final
+    curva.extend(nova_curva)
+
+    # Critério de parada: se já tivermos pontos suficientes, finaliza a recursão
+    if len(curva) >= num_pontos:
+        # Desenha cada ponto da curva final após as subdivisões
+        for ponto in curva:
+            app.color_pixel(int(ponto[0]), int(ponto[1]), cor)  # Desenha o ponto no objeto `app`
+
+            # Controla a velocidade do desenho
+            if velocidade < 100:
+                sleep((100 - velocidade) / 10000)
+
+        return curva
+
+    # Chama a função recursivamente para continuar a subdivisão
+    return desenhar_curva_casteljau(app, nova_curva, num_pontos, velocidade, cor, curva)
